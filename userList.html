@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registered Users</title>
+    <style>
+        table {
+            width: 50%;
+            border-collapse: collapse;
+            margin: 50px 0;
+            font-size: 18px;
+            text-align: left;
+        }
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>User List</h1>
+    <table id="userTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+                <th>Event Name</th>
+                <th>Payment Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- User rows will be appended here by JavaScript -->
+        </tbody>
+    </table>
+
+    <script>
+        async function fetchUserList() {
+            try {
+                const response = await fetch('http://localhost:3000/users');
+                if (response.ok) {
+                    const users = await response.json();
+                    populateTable(users);
+                } else {
+                    console.error('Failed to fetch user list');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function populateTable(users) {
+            const tableBody = document.querySelector('#userTable tbody');
+            tableBody.innerHTML = ''; // Clear any existing rows
+
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                
+                const nameCell = document.createElement('td');
+                nameCell.textContent = user.name;
+                row.appendChild(nameCell);
+
+                const phoneCell = document.createElement('td');
+                phoneCell.textContent = user.phone;
+                row.appendChild(phoneCell);
+
+                const emailCell = document.createElement('td');
+                emailCell.textContent = user.email;
+                row.appendChild(emailCell);
+
+                const eventName = document.createElement('td');
+                eventName.textContent = user.eventName;
+                row.appendChild(eventName);
+
+                const paymentStatus = document.createElement('td');
+                paymentStatus.textContent = user.paymentStatus;
+                row.appendChild(paymentStatus);
+
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Fetch the user list when the page loads
+        window.onload = fetchUserList;
+    </script>
+</body>
+</html>

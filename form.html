@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Event Masters</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="css/fcss.css"
+    />
+    <script src="main.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <form id="contact" method="post">
+        <h3>Registration Form</h3>
+        <h4>Enter correct details</h4>
+        <fieldset>
+          <input
+            placeholder="Your Name"
+            name="name"
+            type="text"
+            id="name"
+            tabindex="1"
+            required
+            autofocus
+          />
+        </fieldset>
+        <fieldset>
+          <input
+            placeholder="Event Name"
+            name="ename"
+            id="ename"
+            type="text"
+            tabindex="1"
+            required
+            autofocus
+          />
+        </fieldset>
+        <fieldset>
+          <input
+            placeholder="Your Email Address"
+            name="email"
+            id="email"
+            type="email"
+            tabindex="2"
+            required
+          />
+        </fieldset>
+        <fieldset>
+          <input
+            placeholder="Your Phone Number"
+            id="phone"
+            name="tel"
+            type="tel"
+            tabindex="3"
+            required
+          />
+        </fieldset>
+        <fieldset>
+          <button name="submit" type="submit" id="contact-submit">
+            Submit
+          </button>
+        </fieldset>
+
+        <p>
+          The Ticket for the event will be sent to your email after verifying
+          your transaction id
+        </p>
+      </form>
+
+      <script>
+        document
+          .getElementById("contact")
+          .addEventListener("submit", async function (event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            // Get the form data
+            const name = document.getElementById("name").value;
+            const phone = document.getElementById("phone").value;
+            const email = document.getElementById("email").value;
+            const ename = document.getElementById("ename").value;
+
+            const userData = {
+              name: name,
+              email: email,
+              phone: phone,
+              isActive: true,
+              paymentStatus: "PAID",
+              eventName: ename,
+            };
+            // Send the data to the server using fetch
+            try {
+              const response = await fetch("http://localhost:3000/users", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(userData),
+              });
+
+              if (response) {
+                alert("User info saved successfully!");
+                   // Clear the form
+                document.getElementById('contact').reset();
+              } else {
+                alert("Failed to save user info.");
+              }
+            } catch (error) {
+              console.error("Error:", error);
+              alert("An error occurred while saving the user info.");
+            }
+          });
+      </script>
+    </div>
+  </body>
+</html>
